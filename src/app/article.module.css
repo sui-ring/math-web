@@ -1,0 +1,175 @@
+/* マークダウン全体のコンテナ */
+.markdown {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    line-height: 1.6;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+/* 見出し */
+.markdown h1 {
+    font-size: 2em;
+    margin: 1.5em 0 0.5em;
+    border-bottom: 2px solid #eee;
+}
+
+.markdown h2 {
+    font-size: 1.8em;
+    margin: 1.2em 0 0.4em;
+    border-bottom: 1px solid #eee;
+}
+
+/* p */
+.markdown p {
+    display: block;
+    line-height: 1.75;
+    margin: 1em 0;
+}
+
+.markdown mark {
+    padding: 0 0.3em;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* リンク */
+.markdown a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+.markdown a:hover {
+    text-decoration: underline;
+}
+
+/* コードブロック */
+.markdown pre {
+    background-color: #f6f8fa;
+    border-radius: 3px;
+    padding: 16px;
+    overflow: auto;
+}
+
+.markdown code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 85%;
+    padding: 0.2em 0.4em;
+    background-color: rgba(27, 31, 35, 0.05);
+    border-radius: 3px;
+}
+
+/* 数式 */
+.markdown .math-inline {
+    padding: 0 0.2em;
+}
+
+.markdown .math-display {
+    margin: 1em 0;
+    overflow-x: auto;
+}
+
+/* テーブル */
+.markdown table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.markdown th,
+.markdown td {
+    border: 1px solid #dfe2e5;
+    padding: 8px 12px;
+}
+
+.markdown th {
+    background-color: #f6f8fa;
+}
+
+/* リスト */
+.markdown ul,
+.markdown ol {
+    padding-left: 2em;
+}
+
+.markdown li {
+    margin: 0.25em 0;
+}
+
+/* 引用 */
+.markdown blockquote {
+    margin: 1em 0;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.25em solid #dfe2e5;
+}
+
+/* mjx-container */
+.mjx-container {
+    display: inline-flex;
+    margin: 0 0.2em;
+}
+
+.mjx-container::before {
+    content: "MathJax";
+    display: block;
+    font-size: 0.8em;
+    color: #6a737d;
+    text-align: center;
+    margin-bottom: 0.2em;
+}
+
+/* after */
+.mjx-container::after {
+    content: "MathJax";
+    display: block;
+    font-size: 0.8em;
+    color: #6a737d;
+    text-align: center;
+    margin-top: 0.2em;
+}
+
+/* 数式の後の余白調整 */
+.mjx-container+* {
+    display: block;
+    margin-top: 0.5em;
+    /* 数式と後続要素との間隔 */
+}
+
+.mjx-container>.mjx-math {
+    display: inline-block;
+}
+
+.mjx-container>.mjx-math>* {
+    display: block;
+}
+
+.mjx-container>.mjx-math>.mjx-mrow {
+    display: inline;
+}
+
+.mjx-container>.mjx-math>.mjx-mrow>* {
+    display: inline;
+}
+
+.mjx-container>.mjx-math>.mjx-mrow>.mjx-mo {
+    display: inline-block;
+}
+
+.mjx-container>.mjx-math>.mjx-mrow>.mjx-mo>* {
+    display: inline;
+}
+
+.mjx-container>.mjx-math>.mjx-mrow>.mjx-mo>.mjx-char {
+    display: inline-block;
+}
+
+.mjx-container>.mjx-math>.mjx-mrow>.mjx-mo>.mjx-char::before {
+    content: "MathJax";
+    display: block;
+    font-size: 0.8em;
+    color: #6a737d;
+    text-align: center;
+    margin-bottom: 0.2em;
+}
