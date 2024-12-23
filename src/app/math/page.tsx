@@ -2,10 +2,7 @@
 import React from 'react';
 import Search from '../../../features/search';
 
-const Page = async ({ params }: {
-    params: Promise<{ cat_slug: string; subcat_slug: string; }>
-}) => {
-
+const Page = async () => {
     return (
         <Search />
     );

@@ -4,7 +4,6 @@ import fs from 'fs/promises';
 
 import { Content } from '../../../../../../common/contensts';
 import ArticleContent from '../../../../../../features/article';
-import Script from 'next/script';
 
 async function getContent(params: { cat_slug: string; subcat_slug: string; id: string }): Promise<Content> {
     const filePath = path.join(process.cwd(), 'src/data/contents.json')

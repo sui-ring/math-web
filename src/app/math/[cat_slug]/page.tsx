@@ -21,9 +21,6 @@ export async function generateStaticParams() {
     const jsonData = await fs.readFile(filePath, 'utf8')
     const contents: Content[] = JSON.parse(jsonData)
 
-    // length of contents
-    console.log(contents.length)
-
     return contents.map((content: Content) => {
         return {
             params: {
