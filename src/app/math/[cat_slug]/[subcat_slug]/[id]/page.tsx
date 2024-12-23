@@ -1,18 +1,9 @@
-import React, { cache } from 'react';
+import React from 'react';
 
 import { Content } from '../../../../../../common/contensts';
 import ArticleContent from '../../../../../../features/article';
 import { Metadata } from 'next';
-import getBaseUrl from '../../../../../../common/url';
 import read_contents from '../../../../../../common/read';
-
-const getMetadata = cache(async (id: string) => {
-    const queryParams = new URLSearchParams();
-    if (id) queryParams.append('id', id);
-    const res = await fetch(`${getBaseUrl()}/api/contents?${queryParams.toString()}`);
-    const data = await res.json() as Content[];
-    return data[0];
-});
 
 // 動的メタデータの生成
 export async function generateMetadata(props: { params: Props }): Promise<Metadata> {
@@ -22,7 +13,8 @@ export async function generateMetadata(props: { params: Props }): Promise<Metada
         throw new Error('Content not found');
     }
 
-    const content = await getMetadata(id);
+    const contents = await read_contents();
+    const content = contents.find((content: Content) => content.id == id) ?? { title: 'Content not found' };
 
     return {
         title: `${content.title} | [GeminiAI生成] 講義と漫才で学ぶ算数数学`,

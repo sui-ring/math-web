@@ -1,33 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
 import { Content } from '../../../../common/contensts';
+import read_contents from '../../../../common/read';
+
+let cachedContents: Content[] | null = null;
 
 export async function GET(request: NextRequest) {
+    if (!cachedContents) {
+        cachedContents = await read_contents();
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const catSlug = searchParams.get('cat_slug');
     const subcatSlug = searchParams.get('subcat_slug');
     const id = searchParams.get('id');
 
-
-    const filePath = path.join(process.cwd(), "src/data/contents.json");
-    const jsonData = await fs.readFile(filePath, "utf8");
-    const contents: Content[] = JSON.parse(jsonData);
+    let filtered = cachedContents;
 
     if (id) {
-        const filtered = contents.filter((content: Content) => content.id == id);
-        return NextResponse.json(filtered);
+        filtered = cachedContents.filter((content) => content.id === id);
     } else if (catSlug && subcatSlug) {
-        const filtered = contents.filter((content: Content) => content.cat_slug === catSlug && content.subcat_slug === subcatSlug);
-        return NextResponse.json(filtered);
+        filtered = cachedContents.filter(
+            (content) => content.cat_slug === catSlug && content.subcat_slug === subcatSlug
+        );
     } else if (catSlug) {
-        const filtered = contents.filter((content: Content) => content.cat_slug === catSlug);
-        return NextResponse.json(filtered);
+        filtered = cachedContents.filter((content) => content.cat_slug === catSlug);
     } else if (subcatSlug) {
-        const filtered = contents.filter((content: Content) => content.subcat_slug === subcatSlug);
-        return NextResponse.json(filtered);
+        filtered = cachedContents.filter((content) => content.subcat_slug === subcatSlug);
     }
 
-    // all contents
-    return NextResponse.json(contents);
+    return NextResponse.json(filtered);
 }
