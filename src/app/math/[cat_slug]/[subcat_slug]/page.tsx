@@ -1,5 +1,3 @@
-import path from 'path';
-import fs from 'fs/promises'
 import React from 'react';
 import { Content, switch_slug_to_label } from '../../../../../common/contensts';
 import { Col, Flex, Row, Typography } from 'antd';
@@ -7,6 +5,7 @@ import Title from 'antd/es/typography/Title';
 import Paragraph from 'antd/es/typography/Paragraph';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import read_contents from '../../../../../common/read';
 
 // 動的メタデータの生成
 export async function generateMetadata(props: { params: Props }): Promise<Metadata> {
@@ -25,20 +24,15 @@ export async function generateMetadata(props: { params: Props }): Promise<Metada
 
 const getContents = async (props: { params: Props }) => {
     const { cat_slug, subcat_slug } = await props.params;
-    const filePath = path.join(process.cwd(), 'src/data/contents.json')
-    const jsonData = await fs.readFile(filePath, 'utf8')
-    const contents: Content[] = JSON.parse(jsonData)
-
-    return contents.filter((content: Content) => content.cat_slug === cat_slug && content.subcat_slug === subcat_slug);
+    const contents = await read_contents();
+    // cat_slugでフィルタリング
+    return contents.filter((content: Content) => (content.cat_slug === cat_slug) && (content.subcat_slug == subcat_slug));
 }
 
 
 // Generate static params for all possible paths
 export async function generateStaticParams() {
-    // file read
-    const filePath = path.join(process.cwd(), 'src/data/contents.json')
-    const jsonData = await fs.readFile(filePath, 'utf8')
-    const contents: Content[] = JSON.parse(jsonData)
+    const contents = await read_contents();
 
     return contents.map((content: Content) => {
         return {

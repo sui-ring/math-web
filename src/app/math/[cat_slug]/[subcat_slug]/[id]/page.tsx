@@ -1,11 +1,10 @@
 import React, { cache } from 'react';
-import path from 'path';
-import fs from 'fs/promises';
 
 import { Content } from '../../../../../../common/contensts';
 import ArticleContent from '../../../../../../features/article';
 import { Metadata } from 'next';
 import getBaseUrl from '../../../../../../common/url';
+import read_contents from '../../../../../../common/read';
 
 const getMetadata = cache(async (id: string) => {
     const queryParams = new URLSearchParams();
@@ -35,30 +34,20 @@ export async function generateMetadata(props: { params: Props }): Promise<Metada
     }
 }
 
-async function getContent(props: { params: Props }): Promise<Content> {
+const getContent = async (props: { params: Props }) => {
     const { id } = await props.params;
-    const filePath = path.join(process.cwd(), 'src/data/contents.json')
-    const jsonData = await fs.readFile(filePath, 'utf8')
-    const contents: Content[] = JSON.parse(jsonData)
+    const res = await read_contents();
 
-    // 一つを取得
-    const content = contents.find((content: Content) => {
-        return content.id == id;
-    });
+    // cat_slugでフィルタリング
+    const contents = res.filter((content: Content) => content.id == id);
 
-    if (!content) {
-        throw new Error('Content not found');
-    }
 
-    return content;
+    return contents[0];
 }
 
 // Generate static params for all possible paths
 export async function generateStaticParams() {
-    // file read
-    const filePath = path.join(process.cwd(), 'src/data/contents.json')
-    const jsonData = await fs.readFile(filePath, 'utf8')
-    const contents: Content[] = JSON.parse(jsonData)
+    const contents = await read_contents();
 
     const result = contents.map((content: Content) => {
         return {
