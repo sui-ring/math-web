@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises'
 import React from 'react';
-import { Typography } from 'antd';
+import { Col, Flex, Row, Typography } from 'antd';
 import Title from 'antd/es/typography/Title';
 import Paragraph from 'antd/es/typography/Paragraph';
 import { Content } from '../../../../common/contensts';
@@ -40,17 +40,20 @@ const Page = async ({ params }: {
     const contents = await getContents(cat_slug);
 
     return (
-        <div>
-            Math page slug: {cat_slug}
-            {contents.map((content: Content) => {
-                return (content.cat_slug === cat_slug) ? (
-                    <Typography key={content.id}>
-                        <Title level={4}>{content.title}</Title>
-                        <Paragraph>{content.content.substring(0, 140) + '...'}</Paragraph>
-                    </Typography>
-                ) : null;
-            })}
-        </div>
+        <Flex justify='space-around' align='center' wrap>
+            <Row gutter={[16, 16]} className='content'>
+                {contents.map((content: Content) => {
+                    return (content.cat_slug === cat_slug) ? (
+                        <Col key={content.id} span={12}>
+                            <Typography>
+                                <Title level={4}>{content.title}</Title>
+                                <Paragraph>{content.content.substring(0, 140) + '...'}</Paragraph>
+                            </Typography>
+                        </Col>
+                    ) : null;
+                })}
+            </Row>
+        </Flex>
     );
 }
 

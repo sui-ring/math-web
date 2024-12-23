@@ -2,6 +2,9 @@ import path from 'path';
 import fs from 'fs/promises'
 import React from 'react';
 import { Content } from '../../../../../common/contensts';
+import { Col, Flex, Row, Typography } from 'antd';
+import Title from 'antd/es/typography/Title';
+import Paragraph from 'antd/es/typography/Paragraph';
 
 const getContents = async (cat_slug: string, subcat_slug: string) => {
     const filePath = path.join(process.cwd(), 'src/data/contents.json')
@@ -36,17 +39,20 @@ const Page = async ({ params }: {
     const contents = await getContents(cat_slug, subcat_slug);
 
     return (
-        <div>
-            Math page slug: {cat_slug}, {subcat_slug}
-            {contents.map((content: Content) => {
-                return (content.cat_slug === cat_slug) && (content.subcat_slug == subcat_slug) ? (
-                    <div key={content.id}>
-                        <h1>{content.title}</h1>
-                        <p>{content.content.substring(0, 140) + '...'}</p>
-                    </div>
-                ) : null;
-            })}
-        </div>
+        <Flex justify='space-around' align='center' wrap>
+            <Row gutter={[16, 16]} className='content'>
+                {contents.map((content: Content) => {
+                    return (content.cat_slug === cat_slug) && (content.subcat_slug == subcat_slug) ? (
+                        <Col key={content.id} span={12}>
+                            <Typography>
+                                <Title level={4}>{content.title}</Title>
+                                <Paragraph>{content.content.substring(0, 140) + '...'}</Paragraph>
+                            </Typography>
+                        </Col>
+                    ) : null;
+                })}
+            </Row>
+        </Flex>
     );
 }
 

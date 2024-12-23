@@ -2,8 +2,10 @@
 import { useState, useEffect } from 'react';
 import styles from "./page.module.css";
 import { Content, Pair } from "../../common/contensts";
-import { Col, Row, Spin } from 'antd';
-import Title from 'antd/es/typography/Title';
+import { Col, Row, Spin, Typography } from 'antd';
+const { Title } = Typography;
+import Search from '../../features/search';
+import Link from 'next/link';
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,13 +57,13 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <Spin spinning={loading}>
-          <Row gutter={[16, 16]} style={{ padding: '2rem' }}>
+          <Row gutter={[16, 16]} className='content'>
             <Col span={6}>
               <Title level={4}>学習要項: 範囲区分</Title>
               <ul>
                 {cats.map((v: Pair) => (
                   <li key={v.slug}>
-                    <a href={`math/${v.slug}`}>{v.label}</a>
+                    <Link href={`/math/${v.slug}`}>{v.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -74,7 +76,7 @@ export default function Home() {
                   .filter((v: Pair) => v.slug.startsWith("el"))
                   .map((v: Pair) => (
                     <li key={v.slug}>
-                      <a href={`math/${v.slug}`}>{v.label}</a>
+                      <Link href={`/math/${v.slug}`}>{v.label}</Link>
                     </li>
                   ))}
               </ul>
@@ -87,7 +89,7 @@ export default function Home() {
                   .filter((v: Pair) => v.slug.startsWith("md"))
                   .map((v: Pair) => (
                     <li key={v.slug}>
-                      <a href={`math/${v.slug}`}>{v.label}</a>
+                      <Link href={`/math/${v.slug}`}>{v.label}</Link>
                     </li>
                   ))}
               </ul>
@@ -108,21 +110,8 @@ export default function Home() {
           </Row>
 
           <Row>
-            <Col>
-              <Title level={4}>記事一覧 （{contents.length}）</Title>
-              <ul>
-                {
-                  contents.map((content: Content) => (
-                    <li key={content.id}>
-                      <a href={`math/${content.cat_slug}/${content.subcat_slug}/${content.id}`}>{content.title}
-                        {/* laugh_contentがあるならば */}
-                        {content.laugh_content && <span style={{ color: 'red' }}>🤣</span>}
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </Col>
+            <Title level={4}>記事一覧 （{contents.length}）</Title>
+            <Search />
           </Row>
         </Spin>
       </main>

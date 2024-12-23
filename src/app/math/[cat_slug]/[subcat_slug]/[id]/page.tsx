@@ -52,7 +52,6 @@ const Page = async ({ params }: {
 
     return (
         <>
-            <Script id='MathJax' async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" />
             <div className='content'>
                 <ArticleContent article={article} />
             </div>

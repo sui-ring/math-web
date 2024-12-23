@@ -39,6 +39,10 @@ a {
   padding: 2rem;
 }
 
+ul li {
+  margin-left: 1rem;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
