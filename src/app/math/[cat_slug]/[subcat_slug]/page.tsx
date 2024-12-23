@@ -1,12 +1,30 @@
 import path from 'path';
 import fs from 'fs/promises'
 import React from 'react';
-import { Content } from '../../../../../common/contensts';
+import { Content, switch_slug_to_label } from '../../../../../common/contensts';
 import { Col, Flex, Row, Typography } from 'antd';
 import Title from 'antd/es/typography/Title';
 import Paragraph from 'antd/es/typography/Paragraph';
+import { Metadata } from 'next';
+import Link from 'next/link';
 
-const getContents = async (cat_slug: string, subcat_slug: string) => {
+// 動的メタデータの生成
+export async function generateMetadata(props: { params: Props }): Promise<Metadata> {
+    const { cat_slug } = await props.params;
+    const title = switch_slug_to_label(cat_slug, '');
+
+    return {
+        title: `${title} | [GeminiAI生成] 講義と漫才で学ぶ算数数学`,
+        description: '講義と漫才で学ぶ算数数学です。当ページでは記事を網羅的に表示し、タイトル・記事内容から検索が可能です。',
+        openGraph: {
+            title: `${title} | [GeminiAI生成] 講義と漫才で学ぶ算数数学`,
+            description: '講義と漫才で学ぶ算数数学です。当ページでは記事を網羅的に表示し、タイトル・記事内容から検索が可能です。',
+        }
+    }
+}
+
+const getContents = async (props: { params: Props }) => {
+    const { cat_slug, subcat_slug } = await props.params;
     const filePath = path.join(process.cwd(), 'src/data/contents.json')
     const jsonData = await fs.readFile(filePath, 'utf8')
     const contents: Content[] = JSON.parse(jsonData)
@@ -32,11 +50,11 @@ export async function generateStaticParams() {
     });
 }
 
-const Page = async ({ params }: {
-    params: Promise<{ cat_slug: string; subcat_slug: string; }>
-}) => {
-    const { cat_slug, subcat_slug } = await params;
-    const contents = await getContents(cat_slug, subcat_slug);
+type Props = Promise<{ cat_slug: string; subcat_slug: string; }>
+
+const Page = async (props: { params: Props }) => {
+    const { cat_slug, subcat_slug } = await props.params;
+    const contents = await getContents(props);
 
     return (
         <Flex justify='space-around' align='center' wrap>
@@ -45,7 +63,7 @@ const Page = async ({ params }: {
                     return (content.cat_slug === cat_slug) && (content.subcat_slug == subcat_slug) ? (
                         <Col key={content.id} span={12}>
                             <Typography>
-                                <Title level={4}>{content.title}</Title>
+                                <Link href={`/math/${content.cat_slug}/${content.subcat_slug}/${content.id}`}><Title level={4}>{content.title}</Title></Link>
                                 <Paragraph>{content.content.substring(0, 140) + '...'}</Paragraph>
                             </Typography>
                         </Col>

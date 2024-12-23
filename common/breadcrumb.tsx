@@ -21,7 +21,6 @@ const replaceWords = (slug: string) => {
 
 const BreadcrumbNav = () => {
   const pathname = usePathname();
-  console.log(pathname);
 
   const paths = pathname.split('/').filter(path => path);
 
