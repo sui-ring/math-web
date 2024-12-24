@@ -12,11 +12,14 @@ export interface Content {
     subcat: string;
     subcat_slug: string;
     subject: string;
+    subject_slug: string;
     base: string;
     content: string;
     laugh_content: string;
+    images?: string[];
     model_name: string;
     created_at: string;
+    updated_at?: string;
 }
 
 export const switch_slug_to_label = (cat_slug: string, subcat_slug: string): string => {

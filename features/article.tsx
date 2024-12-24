@@ -67,7 +67,9 @@ const ArticleContent: React.FC<{ article: Content }> = ({ article }) => {
         <>
             <h4>{article.title}</h4>
             <Typography.Text type="secondary">
-                model: <b>{article.model_name}</b>, created: <b>{formatDateTime(article.created_at)}</b>
+                model: <b>{article.model_name}</b>, created: <b>{
+                    (article.updated_at) ? formatDateTime(article.updated_at) : formatDateTime(article.created_at)
+                }</b>
             </Typography.Text>
             <Typography>
                 <Tabs items={items} />

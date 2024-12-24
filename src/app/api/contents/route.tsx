@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
     }
 
     const searchParams = request.nextUrl.searchParams;
+    const subjectSlug = searchParams.get('subject_slug');
     const catSlug = searchParams.get('cat_slug');
     const subcatSlug = searchParams.get('subcat_slug');
     const id = searchParams.get('id');
@@ -18,6 +19,10 @@ export async function GET(request: NextRequest) {
 
     if (id) {
         filtered = cachedContents.filter((content) => content.id === id);
+    } else if (subjectSlug) {
+        filtered = cachedContents.filter(
+            (content) => content.subject_slug === subjectSlug
+        );
     } else if (catSlug && subcatSlug) {
         filtered = cachedContents.filter(
             (content) => content.cat_slug === catSlug && content.subcat_slug === subcatSlug

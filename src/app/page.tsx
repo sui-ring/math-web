@@ -2,17 +2,19 @@
 import { useState, useEffect } from 'react';
 import styles from "./page.module.css";
 import { Content, Pair } from "../../common/contensts";
-import { Col, Row, Spin, Typography } from 'antd';
+import { Col, Row, Space, Spin, Typography } from 'antd';
 const { Title } = Typography;
 import Search from '../../features/search';
 import Link from 'next/link';
+import Paragraph from 'antd/es/typography/Paragraph';
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [contents, setContents] = useState<Content[]>([]);
   // コンテンツからカテゴリのリンクを生成する
-  const [cats, setCats] = useState<Pair[]>([]);
   const [patterns, setPatterns] = useState<Pair[]>([]);
+  // 科目区分
+  const [subjects, setSubjects] = useState<Pair[]>([]);
 
 
   useEffect(() => {
@@ -28,20 +30,20 @@ export default function Home() {
         setContents(data);
 
         // create Pair[] from contents
-        const cats: Pair[] = [];
-        const patterns: Pair[] = [];
+        const temp_patterns: Pair[] = [];
+        const temp_subjects: Pair[] = []; // 科目区分
         data.forEach((content: Content) => {
-          if (content.cat_slug) {
-            cats.push({ label: content.cat, slug: content.cat_slug });
-          }
           // /cat_slug/subcat_slug
           if (content.cat_slug && content.subcat_slug) {
-            patterns.push({ label: content.cat + content.subcat, slug: content.cat_slug + "/" + content.subcat_slug });
+            temp_patterns.push({ label: content.cat + content.subcat + content.subject, slug: "/" + content.subject_slug + "/" + content.cat_slug + "/" + content.subcat_slug });
+          }
+          // 科目区分
+          if (content.subject_slug) {
+            temp_subjects.push({ label: content.subject, slug: content.subject_slug });
           }
         });
-        setPatterns(patterns.filter(unique));
-        setCats(cats.filter(unique));
-
+        setPatterns(temp_patterns.filter(unique));
+        setSubjects(temp_subjects.filter(unique));
 
       } catch (error) {
         console.error('Failed to fetch contents:', error);
@@ -58,54 +60,68 @@ export default function Home() {
       <main className={styles.main}>
         <Spin spinning={loading}>
           <Row gutter={[16, 16]} className='content'>
-            <Col span={6}>
-              <Title level={4}>学習要項: 範囲区分</Title>
-              <ul>
-                {cats.map((v: Pair) => (
-                  <li key={v.slug}>
-                    <Link href={`/math/${v.slug}`}>{v.label}</Link>
-                  </li>
-                ))}
-              </ul>
-            </Col>
-            <Col span={6}>
-              <Title level={3}>小学区分</Title>
-              <ul>
-                {/* cat_slug==elのみ */}
-                {patterns
-                  .filter((v: Pair) => v.slug.startsWith("el"))
-                  .map((v: Pair) => (
-                    <li key={v.slug}>
-                      <Link href={`/math/${v.slug}`}>{v.label}</Link>
-                    </li>
-                  ))}
-              </ul>
-            </Col>
-            <Col span={6}>
-              <Title level={3}>中学区分</Title>
-              <ul>
-                {/* cat_slug==elのみ */}
-                {patterns
-                  .filter((v: Pair) => v.slug.startsWith("md"))
-                  .map((v: Pair) => (
-                    <li key={v.slug}>
-                      <Link href={`/math/${v.slug}`}>{v.label}</Link>
-                    </li>
-                  ))}
-              </ul>
-            </Col>
-            <Col span={6}>
-              <Title level={3}>高校区分</Title>
-              <ul>
-                {/* cat_slug==elのみ */}
-                {patterns
-                  .filter((v: Pair) => v.slug.startsWith("hi"))
-                  .map((v: Pair) => (
-                    <li key={v.slug}>
-                      <a href={`math/${v.slug}`}>{v.label}</a>
-                    </li>
-                  ))}
-              </ul>
+            <Col>
+              <Row gutter={[16, 16]}>
+                <Col>
+                  <Title level={3}>科目区分</Title>
+                  <Row>
+                    <Paragraph>
+                      {/* cat_slug==elのみ */}
+                      <Space>
+                        {subjects
+                          .map((v: Pair) => (
+                            <Link key={v.slug} href={`/${v.slug}`}>{v.label}</Link>
+                          ))}
+                      </Space>
+                    </Paragraph>
+                  </Row>
+                </Col>
+              </Row>
+              <Row gutter={[16, 16]}>
+                <Col>
+                  <Title level={3}>小学区分</Title>
+                  <Paragraph>
+                    {/* cat_slug==elのみ */}
+                    <Space wrap>
+                      {patterns
+                        .filter((v: Pair) => v.slug.includes("el"))
+                        .map((v: Pair) => (
+                          <Link key={v.slug} href={`${v.slug}`}>{v.label}</Link>
+                        ))}
+                    </Space>
+                  </Paragraph>
+                </Col>
+              </Row>
+              <Row gutter={[16, 16]}>
+                <Col>
+                  <Title level={3}>中学区分</Title>
+                  <Paragraph>
+                    {/* cat_slug==elのみ */}
+                    <Space wrap>
+                      {patterns
+                        .filter((v: Pair) => v.slug.includes("md"))
+                        .map((v: Pair) => (
+                          <Link key={v.slug} href={`${v.slug}`}>{v.label}</Link>
+                        ))}
+                    </Space>
+                  </Paragraph>
+                </Col>
+              </Row>
+              <Row gutter={[16, 16]}>
+                <Col>
+                  <Title level={3}>高校区分</Title>
+                  <Paragraph>
+                    {/* cat_slug==elのみ */}
+                    <Space wrap>
+                      {patterns
+                        .filter((v: Pair) => v.slug.includes("hi"))
+                        .map((v: Pair) => (
+                          <Link key={v.slug} href={`${v.slug}`}>{v.label}</Link>
+                        ))}
+                    </Space>
+                  </Paragraph>
+                </Col>
+              </Row>
             </Col>
           </Row>
 
@@ -114,7 +130,7 @@ export default function Home() {
             <Search />
           </Row>
         </Spin>
-      </main>
+      </main >
       <footer className={styles.footer}>
 
       </footer>

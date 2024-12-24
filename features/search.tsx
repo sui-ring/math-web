@@ -4,12 +4,12 @@ import { Input, Col, Flex, Row, Typography } from 'antd';
 import Title from 'antd/es/typography/Title';
 import Paragraph from 'antd/es/typography/Paragraph';
 import { Content } from "../common/contensts";
-import { log } from "node:console";
 import Link from "next/link";
 
-const getContents = async (): Promise<Content[]> => {
+const getContents = async (subject_slug?: string): Promise<Content[]> => {
     try {
-        const result = await fetch('/api/contents')
+        const url = (subject_slug) ? '/api/contents?subject_slug=' + subject_slug : '/api/contents';
+        const result = await fetch(url);
         const data: Content[] = await result.json()
 
         return data;
@@ -19,13 +19,15 @@ const getContents = async (): Promise<Content[]> => {
     }
 }
 
-const Search = () => {
+const Search = (
+    { subject_slug }: { subject_slug?: string }
+) => {
     const word = useRef('');
     const [contents, setContents] = useState<Content[]>([]);
     const [results, setResults] = useState<Content[]>([]);
 
     useEffect(() => {
-        getContents().then((data) => {
+        getContents(subject_slug).then((data) => {
             setContents(data);
             setResults(data);
         })
@@ -54,7 +56,7 @@ const Search = () => {
                     {results.map((content: Content) => {
                         return (
                             <Col key={content.id} span={12}>
-                                <Link href={`/math/${content.cat_slug}/${content.subcat_slug}/${content.id}`}>
+                                <Link href={`/${content.subject_slug}/${content.cat_slug}/${content.subcat_slug}/${content.id}`}>
                                     <Title level={4}>{content.title}</Title>
                                     <Paragraph>{content.content.substring(0, 140) + '...'}</Paragraph>
                                 </Link>

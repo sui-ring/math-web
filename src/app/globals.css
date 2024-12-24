@@ -48,3 +48,10 @@ ul li {
     color-scheme: dark;
   }
 }
+
+/* スマホ用の.content */
+@media (max-width: 768px) {
+  .content {
+    padding: 2rem 0.25rem;
+  }
+}
