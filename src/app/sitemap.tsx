@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 url: '/',
                 lastModified: new Date().toISOString(),
                 changeFrequency: 'monthly',
-                priority: 0.8
+                priority: 1.0
             },
             {
                 url: '/about',
