@@ -27,4 +27,5 @@ const read_contents = async () => {
     }
 }
 
+
 export default read_contents;
