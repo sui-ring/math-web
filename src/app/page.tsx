@@ -34,7 +34,7 @@ export default function Home() {
         const temp_subjects: Pair[] = []; // 科目区分
         data.forEach((content: Content) => {
           // /cat_slug/subcat_slug
-          if (content.cat_slug && content.subcat_slug) {
+          if (content.cat_slug) {
             temp_patterns.push({ label: content.cat + content.subcat + content.subject, slug: "/" + content.subject_slug + "/" + content.cat_slug + "/" + content.subcat_slug });
           }
           // 科目区分
