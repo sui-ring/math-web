@@ -101,6 +101,9 @@ const ArticleContent: React.FC<{ article: Content }> = ({ article }) => {
             children: (
                 VideoList({ n: N, video_urls: article.video_urls ? article.video_urls : [] })
             ),
+
+            // video_urlsが空の場合は表示しない
+            disabled: !article.video_urls || article.video_urls.length === 0,
         },
     ];
 
