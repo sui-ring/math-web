@@ -6,22 +6,29 @@ export type Pair = {
 export interface Content {
     id: string;
     title: string;
+
     url?: string;
+
     cat: string;
     cat_slug: string;
+
     subcat: string;
     subcat_slug: string;
+
     subject: string;
     subject_slug: string;
     base: string;
+
     content: string;
     laugh_content: string;
-    image_urls?: string[];
-    video_urls?: string[];
-    tags?: string[];
+
+    image_urls: string[] | null;
+    video_urls: string[] | null;
+    tags: string[] | null;
+
     model_name: string;
     created_at: string;
-    updated_at?: string;
+    updated_at?: string | null;
 }
 
 export const switch_slug_to_label = (cat_slug: string, subcat_slug: string): string => {
