@@ -16,7 +16,9 @@ export interface Content {
     base: string;
     content: string;
     laugh_content: string;
-    images?: string[];
+    image_urls?: string[];
+    video_urls?: string[];
+    tags?: string[];
     model_name: string;
     created_at: string;
     updated_at?: string;
