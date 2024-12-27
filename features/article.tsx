@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Col, Flex, Row, Tabs, TabsProps, Typography } from 'antd';
+import React, { useEffect } from 'react';
+import { Button, Col, Flex, Row, Image, Tabs, TabsProps, Typography } from 'antd';
 import { Content } from '../common/contensts';
 
 import ReactMarkdown from 'react-markdown'
@@ -11,11 +11,12 @@ import remarkParse from 'remark-parse'
 import remarkBreaks from 'remark-breaks'
 import rehypeMathjax from 'rehype-mathjax'
 import styles from '../src/app/article.module.css';
-import Link from 'next/link';
+
+import gacha from '../public/gacha-btn.png';
 
 const { Text } = Typography;
 
-const N = 6;
+const N = 4;
 
 const formatDateTime = (utcString: string) => {
     const date = new Date(utcString);
@@ -34,34 +35,62 @@ const CustomComponents = {
 
 // content.video_urlsをリスト表示
 const VideoList = ({ n, video_urls }: { n: number, video_urls: string[] }) => {
-    // 配列長をlimitにnこの配列をランダムに選択
-    const length = video_urls.length;
-    // length内でn個のランダムかつ重複のない整数を生成
-    const uniqueIndices = new Set<number>();
-    while (uniqueIndices.size < Math.min(n, length)) {
-        uniqueIndices.add(Math.floor(Math.random() * length));
-    }
+    const [indexes, setIndexes] = React.useState<Set<number>>(new Set<number>());
+
+    const createUniqueIndices = React.useCallback(() => {
+        // 配列長をlimitにnこの配列をランダムに選択
+        const length = video_urls.length;
+        // length内でn個のランダムかつ重複のない整数を生成
+        const indexes = new Set<number>();
+        while (indexes.size < Math.min(n, length)) {
+            indexes.add(Math.floor(Math.random() * length));
+        }
+        return indexes;
+    }, [n, video_urls.length]);
+
+    useEffect(() => {
+        const setter = () => {
+            // 配列長をlimitにnこの配列をランダムに選択
+            const length = video_urls.length;
+            // length内でn個のランダムかつ重複のない整数を生成
+            const indexes = new Set<number>();
+            while (indexes.size < Math.min(n, length)) {
+                indexes.add(Math.floor(Math.random() * length));
+            }
+            return indexes;
+        };
+        setIndexes(setter());
+    }, [createUniqueIndices]);
 
     return (
-
-        <Row gutter={[16, 16]} wrap>
-            <Flex wrap align="center" justify="center">
-                {Array.from(uniqueIndices).map((index: number) => {
-                    return (
-                        <Col key={index} span={12}>
-                            <iframe
-                                width="100%"
-                                height="315"
-                                src={`https://www.youtube.com/embed/${video_urls[index]}`}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerPolicy="strict-origin-when-cross-origin"
-                                allowFullScreen
-                            ></iframe>
-                        </Col>
-                    )
-                })}
+        <div className='content'>
+            <Row gutter={[16, 16]} wrap>
+                <Flex wrap align="center" justify="center">
+                    {Array.from(indexes).map((index: number) => {
+                        return (
+                            <Col key={index} span={12}>
+                                <iframe
+                                    width="100%"
+                                    height="240"
+                                    src={`https://www.youtube.com/embed/${video_urls[index]}`}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    allowFullScreen
+                                ></iframe>
+                            </Col>
+                        )
+                    })}
+                </Flex>
+            </Row>
+            <Flex align='center' justify='flex-end'>
+                <Row gutter={[16, 16]}>
+                    <Col>
+                        <Image src={gacha.src} alt='ガチャ' width={64} height={64} preview={false} onClick={() => setIndexes(createUniqueIndices())} title='動画再選択ガチャ' />
+                    </Col>
+                </Row>
             </Flex>
-        </Row>
+        </div>
+
     );
 };
 
