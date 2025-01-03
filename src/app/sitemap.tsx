@@ -100,25 +100,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 
     // コンテンツ情報を追記する
-    console.log('contents.length', contents.length)
-    contents.forEach((content, index) => {
-        if (index > 330) {
-            return;
-        }
+    // 2025/01/03: 個別ページは除外
+    // console.log('contents.length', contents.length)
+    // contents.forEach((content, index) => {
+    //     if (index > 330) {
+    //         return;
+    //     }
 
-        // 日付をDate型に変換
-        const date = content.updated_at ? new Date(content.updated_at) : new Date(content.created_at);
-        const contentUrl = `${baseUrl}/${content.subject_slug}/${content.cat_slug}/${content.subcat_slug}/${content.id}`
-            .toLowerCase()
-            .trim()
-            .replace(/\/+$/, '');
-        sitemap.push({
-            url: contentUrl,
-            lastModified: date,
-            changeFrequency: 'daily',
-            priority: 0.6
-        })
-    })
+    //     // 日付をDate型に変換
+    //     const date = content.updated_at ? new Date(content.updated_at) : new Date(content.created_at);
+    //     const contentUrl = `${baseUrl}/${content.subject_slug}/${content.cat_slug}/${content.subcat_slug}/${content.id}`
+    //         .toLowerCase()
+    //         .trim()
+    //         .replace(/\/+$/, '');
+    //     sitemap.push({
+    //         url: contentUrl,
+    //         lastModified: date,
+    //         changeFrequency: 'daily',
+    //         priority: 0.6
+    //     })
+    // })
 
     const otherPages: SitemapRow[] = [
         {
